@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "456650375493",
+    "project_id": "kimo-clean-user",
+    "storage_bucket": "kimo-clean-user.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:456650375493:android:b7b365bb8f242c1790be2c",
+        "android_client_info": {
+          "package_name": "com.example.kimo_clean"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCrP39EKBUO2-jMluoHC2aKUw4q9b5yWkM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
