@@ -3,13 +3,15 @@ import 'package:kimo_clean/core/constants/app_strings.dart';
 import 'package:kimo_clean/features/orders/presentation/widgets/new_order_body.dart';
 
 class NewOrderScreen extends StatelessWidget {
-  const NewOrderScreen({super.key});
+  final String? initialLookupQuery;
+
+  const NewOrderScreen({super.key, this.initialLookupQuery});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text(AppStrings.newOrderTitle)),
-      body: const NewOrderBody(),
+      body: NewOrderBody(initialLookupQuery: initialLookupQuery),
     );
   }
 }

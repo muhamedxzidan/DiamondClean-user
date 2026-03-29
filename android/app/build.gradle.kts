@@ -37,10 +37,21 @@ android {
             
             isMinifyEnabled = true
             isShrinkResources = true
+            isDebuggable = false
+            isJniDebuggable = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+        }
+    }
+
+    splits {
+        abi {
+            isEnable = true
+            reset()
+            include("armeabi-v7a", "arm64-v8a", "x86_64")
+            isUniversalApk = true
         }
     }
 }
@@ -95,7 +106,6 @@ tasks.whenTaskAdded {
                 val symbolsDir = file("$rootBuildDir/app/outputs/symbols")
                 symbolsDir.mkdirs()
                 mappingFile.copyTo(File(symbolsDir, "mapping.txt"), overwrite = true)
-                println("ProGuard mapping copied successfully to symbols directory.")
             }
         }
     }

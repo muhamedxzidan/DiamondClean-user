@@ -7,6 +7,7 @@ class AppStrings {
   static const String undefined = 'غير محدد';
   static const String pieces = 'قطع';
   static const String pageNotFound = 'الصفحة غير موجودة';
+  static const String errorTitle = 'خطأ';
 
   // Repositories & Services Exceptions
   static const String errorCarNotRegistered = 'رقم السيارة غير مسجل في النظام';
@@ -35,6 +36,9 @@ class AppStrings {
   // WhatsApp Strings
   static const String whatsappMessageHeader = '🧺 *أوردر جديد من كيمو كلين*';
   static const String whatsappMessageSeparator = '---------------------------';
+  static const String whatsappCustomerCodePrefix = '🆔 *كود العميل:* ';
+  static const String whatsappOrderReceivedSuccess =
+      '✅ تم استلام أوردرك بنجاح.';
   static const String whatsappOrderNumberPrefix = '🔢 *رقم الأوردر:* #';
   static const String whatsappCustomerPrefix = '👤 *العميل:* ';
   static const String whatsappPhonePrefix = '📞 *التليفون:* ';
@@ -62,6 +66,12 @@ class AppStrings {
   static const String drawerDailyOrders = 'الطلب اليومي';
   static const String drawerLogout = 'تسجيل الخروج';
   static const String carPrefix = 'سيارة:';
+  static const String homeFastActionHubTitle = 'محور التنفيذ السريع';
+  static const String homeSearchHint =
+      'بحث برقم الموبايل أو كود العميل (مثلاً 5)';
+  static const String homeSearchTooltip = 'بحث';
+  static const String homeSearchEmptyValidation =
+      'من فضلك أدخل رقم الموبايل أو كود العميل.';
 
   // --- Orders ---
   static const String newOrderTitle = 'تسجيل أوردر جديد';
@@ -74,12 +84,23 @@ class AppStrings {
   static const String phoneLengthValidation = 'رقم الهاتف يجب أن يكون 11 رقم';
   static const String customerNameLabel = 'اسم العميل';
   static const String addressLabel = 'العنوان';
+  static const String customerCodeLabel = 'كود العميل';
+  static const String customerCodeAutoGenerate =
+      'سيتم إنشاؤه تلقائياً عند الحفظ';
   static const String savingInProgress = 'جاري الحفظ...';
   static const String saveAndSendToWhatsapp = 'حفظ وإرسال للواتساب';
   static const String atLeastOneCategoryValidation =
       'برجاء اختيار صنف واحد على الأقل';
   static const String orderDetailsTitle = 'تفاصيل الطلب';
   static const String orderNumberPrefix = 'رقم الطلب:';
+  static const String lookupSearchingByPhone = 'جاري البحث برقم الموبايل...';
+  static const String lookupSearchingByCodePrefix = 'جاري البحث بكود العميل:';
+  static const String lookupFoundCustomerPrefix = 'تم العثور على العميل:';
+  static const String lookupNotFoundByPhone =
+      'لا يوجد عميل بهذا الرقم، يمكنك تسجيل بيانات جديدة.';
+  static const String lookupNotFoundByCodePrefix = 'لا يوجد عميل بكود';
+  static const String lookupPhoneFieldHint =
+      'أدخل 11 رقم للبحث التلقائي وتعبئة البيانات';
 
   // --- Order Categories ---
   static const String categoryCarpet = 'سجاد';

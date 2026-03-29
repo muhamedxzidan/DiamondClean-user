@@ -1,7 +1,7 @@
-import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:kimo_clean/core/constants/app_strings.dart';
+import 'package:kimo_clean/core/constants/firebase_constants.dart';
 
 /// Custom exception for authentication errors with user-facing messages.
 sealed class AuthException implements Exception {
@@ -64,7 +64,10 @@ class AuthRepository {
     required String password,
   }) async {
     try {
-      final carDoc = await _firestore.collection('cars').doc(carNumber).get();
+      final carDoc = await _firestore
+          .collection(FirebaseCollections.cars)
+          .doc(carNumber)
+          .get();
 
       if (!carDoc.exists || carDoc.data() == null) {
         throw const CarNotFoundException();
@@ -85,10 +88,13 @@ class AuthRepository {
       }
 
       // ── Success: persist locally & update Firestore ──
-      await _firestore.collection('cars').doc(carNumber).update({
-        'currentAgentName': agentName,
-        'lastLoginAt': FieldValue.serverTimestamp(),
-      });
+      await _firestore
+          .collection(FirebaseCollections.cars)
+          .doc(carNumber)
+          .update({
+            'currentAgentName': agentName,
+            'lastLoginAt': FieldValue.serverTimestamp(),
+          });
 
       await _secureStorage.write(key: _StorageKeys.agentName, value: agentName);
       await _secureStorage.write(key: _StorageKeys.carNumber, value: carNumber);
@@ -96,18 +102,12 @@ class AuthRepository {
       return true;
     } on AuthException {
       rethrow; // Already a user-facing exception
-    } on FirebaseException catch (e, stackTrace) {
-      log(
-        'Firebase login error: [${e.code}] ${e.message}',
-        error: e,
-        stackTrace: stackTrace,
-      );
+    } on FirebaseException catch (e) {
       if (e.code == 'permission-denied') {
         throw const AuthPermissionDeniedException();
       }
       throw const AuthNetworkException();
-    } catch (e, stackTrace) {
-      log('Unexpected login error: $e', error: e, stackTrace: stackTrace);
+    } catch (_) {
       throw const AuthNetworkException();
     }
   }
@@ -116,13 +116,15 @@ class AuthRepository {
   /// Returns `true` only if the document exists AND `isActive == true`.
   Future<bool> checkCarStatus(String carNumber) async {
     try {
-      final carDoc = await _firestore.collection('cars').doc(carNumber).get();
+      final carDoc = await _firestore
+          .collection(FirebaseCollections.cars)
+          .doc(carNumber)
+          .get();
 
       if (!carDoc.exists || carDoc.data() == null) return false;
 
       return carDoc.data()!['isActive'] as bool? ?? false;
-    } catch (e, stackTrace) {
-      log('Error checking car status: $e', error: e, stackTrace: stackTrace);
+    } catch (_) {
       return false; // Fail-safe: treat as inactive on error
     }
   }

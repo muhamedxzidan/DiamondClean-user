@@ -1,14 +1,13 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kimo_clean/core/constants/app_strings.dart';
 import 'package:kimo_clean/features/auth/data/repositories/auth_repository.dart';
-import 'package:kimo_clean/features/orders/data/models/order_item_model.dart';
-import 'package:kimo_clean/features/orders/data/repositories/order_repository.dart';
 import 'package:kimo_clean/features/orders/cubit/new_order_state.dart';
+import 'package:kimo_clean/features/orders/cubit/order_items_manager.dart';
+import 'package:kimo_clean/features/orders/data/repositories/order_repository.dart';
 
 class NewOrderCubit extends Cubit<NewOrderState> {
   final OrderRepository _orderRepository;
   final AuthRepository _authRepository;
-
   NewOrderCubit({
     required AuthRepository authRepository,
     required OrderRepository orderRepository,
@@ -16,8 +15,7 @@ class NewOrderCubit extends Cubit<NewOrderState> {
        _orderRepository = orderRepository,
        super(NewOrderInitial());
 
-  // --- Item names (static list, could come from repo later) ---
-  static const List<String> itemNames = [
+  static const itemNames = [
     AppStrings.categoryCarpet,
     AppStrings.categoryCarpetCover,
     AppStrings.categoryDuvet,
@@ -25,72 +23,57 @@ class NewOrderCubit extends Cubit<NewOrderState> {
     AppStrings.categoryCurtains,
     AppStrings.categoryOther,
   ];
+  late final OrderItemsManager _itemsManager = OrderItemsManager(itemNames);
 
-  // Internal mutable state for item quantities
-  final Map<String, int> _quantities = {for (final name in itemNames) name: 0};
+  int get totalPieces => _itemsManager.totalPieces;
+  int quantityFor(String itemName) => _itemsManager.quantityFor(itemName);
+  String _normalizePhone(String phone) =>
+      phone.replaceAll(RegExp(r'[^0-9]'), '');
+  void _emitItemsUpdated() => emit(
+    NewOrderItemsUpdated(
+      items: _itemsManager.itemsList,
+      totalPieces: totalPieces,
+    ),
+  );
 
-  int get totalPieces => _quantities.values.fold(0, (a, b) => a + b);
-
-  List<OrderItem> get _itemsList => _quantities.entries
-      .map((e) => OrderItem(name: e.key, quantity: e.value))
-      .toList();
-
-  int quantityFor(String itemName) => _quantities[itemName] ?? 0;
-
-  String _normalizePhone(String phone) {
-    return phone.replaceAll(RegExp(r'[^0-9]'), '');
-  }
-
-  /// Called when phone number reaches 11 digits.
-  Future<void> lookupCustomer(String phone) async {
-    final normalizedPhone = _normalizePhone(phone);
-    if (normalizedPhone.length != 11) {
-      emit(NewOrderItemsUpdated(items: _itemsList, totalPieces: totalPieces));
-      return;
-    }
-
+  Future<void> lookupCustomer(String phoneOrCode) async {
+    final numericQuery = _normalizePhone(phoneOrCode);
+    if (numericQuery.isEmpty) return;
     emit(NewOrderPhoneLookupLoading());
 
     try {
-      final customerData = await _orderRepository.lookupCustomerByPhone(
-        normalizedPhone,
-      );
-
+      final customerData = await _orderRepository.lookupCustomer(numericQuery);
       if (customerData != null) {
         emit(
           NewOrderPhoneLookupSuccess(
+            phone: customerData.phone,
             customerName: customerData.name,
             address: customerData.address,
+            customerCode: customerData.customerCode,
             customerSerial: customerData.customerSerial,
           ),
         );
-        emit(NewOrderItemsUpdated(items: _itemsList, totalPieces: totalPieces));
       } else {
-        emit(NewOrderItemsUpdated(items: _itemsList, totalPieces: totalPieces));
+        emit(NewOrderCustomerLookupNotFound(numericQuery));
       }
-    } on OrderRepositoryException {
-      emit(NewOrderItemsUpdated(items: _itemsList, totalPieces: totalPieces));
-    } catch (e) {
-      emit(NewOrderItemsUpdated(items: _itemsList, totalPieces: totalPieces));
+    } on OrderRepositoryException catch (e) {
+      emit(NewOrderValidationError(e.message));
+    } catch (_) {
+      emit(NewOrderValidationError(AppStrings.errorFetchingCustomerData));
     }
   }
 
-  /// Increment quantity for a given item.
+  void clearLookupState() => _emitItemsUpdated();
   void incrementItem(String itemName) {
-    _quantities[itemName] = (_quantities[itemName] ?? 0) + 1;
-    emit(NewOrderItemsUpdated(items: _itemsList, totalPieces: totalPieces));
+    _itemsManager.increment(itemName);
+    _emitItemsUpdated();
   }
 
-  /// Decrement quantity for a given item (minimum 0).
   void decrementItem(String itemName) {
-    final current = _quantities[itemName] ?? 0;
-    if (current > 0) {
-      _quantities[itemName] = current - 1;
-      emit(NewOrderItemsUpdated(items: _itemsList, totalPieces: totalPieces));
-    }
+    _itemsManager.decrement(itemName);
+    _emitItemsUpdated();
   }
 
-  /// Validates and triggers save action.
   Future<void> saveOrder({
     required String phone,
     required String name,
@@ -102,27 +85,17 @@ class NewOrderCubit extends Cubit<NewOrderState> {
       emit(NewOrderValidationError(AppStrings.phoneLengthValidation));
       return;
     }
-
     if (totalPieces == 0) {
       emit(NewOrderValidationError(AppStrings.atLeastOneCategoryValidation));
       return;
     }
 
     emit(NewOrderSaveLoading());
-
     try {
-      // Get the items that actually have quantities > 0
-      final Map<String, int> selectedItems = {};
-      _quantities.forEach((key, value) {
-        if (value > 0) {
-          selectedItems[key] = value;
-        }
-      });
-
+      final selectedItemsSnapshot = Map<String, int>.from(
+        _itemsManager.selectedItems(),
+      );
       final totalPiecesSnapshot = totalPieces;
-      final selectedItemsSnapshot = Map<String, int>.from(selectedItems);
-
-      // Get car number from authenticated session
       final carNumber = await _authRepository.getSavedCarNumber() ?? '';
       final savedAgentName = await _authRepository.getSavedAgentName();
       final driverName =
@@ -130,7 +103,7 @@ class NewOrderCubit extends Cubit<NewOrderState> {
           ? AppStrings.undefined
           : savedAgentName.trim();
 
-      final serialNumber = await _orderRepository.createOrder(
+      final createOrderResult = await _orderRepository.createOrder(
         phone: normalizedPhone,
         customerName: name,
         customerAddress: address,
@@ -140,14 +113,11 @@ class NewOrderCubit extends Cubit<NewOrderState> {
         driverName: driverName,
       );
 
-      // Reset internal quantities
-      for (final key in _quantities.keys.toList()) {
-        _quantities[key] = 0;
-      }
-
+      _itemsManager.reset();
       emit(
         NewOrderSaveSuccess(
-          serialNumber: serialNumber,
+          serialNumber: createOrderResult.serialNumber,
+          customerCode: createOrderResult.customerCode,
           customerName: name,
           phone: normalizedPhone,
           address: address,
@@ -157,19 +127,18 @@ class NewOrderCubit extends Cubit<NewOrderState> {
         ),
       );
     } catch (e) {
-      if (e is OrderRepositoryException) {
-        emit(NewOrderSaveError(e.message));
-      } else {
-        emit(NewOrderSaveError(AppStrings.unexpectedError));
-      }
+      emit(
+        NewOrderSaveError(
+          e is OrderRepositoryException
+              ? e.message
+              : AppStrings.unexpectedError,
+        ),
+      );
     }
   }
 
-  /// Resets items back to initial after save.
   void reset() {
-    for (final key in _quantities.keys.toList()) {
-      _quantities[key] = 0;
-    }
+    _itemsManager.reset();
     emit(NewOrderInitial());
   }
 }

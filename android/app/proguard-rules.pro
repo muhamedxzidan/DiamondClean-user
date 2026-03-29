@@ -20,7 +20,12 @@
 -dontusemixedcaseclassnames
 -dontskipnonpubliclibraryclasses
 -dontpreverify
--verbose
+
+# Strengthen obfuscation and stripping in release builds.
+-allowaccessmodification
+-adaptclassstrings
+-repackageclasses
+-flattenpackagehierarchy
 
 # Remove logging to prevent data leakage in production
 -assumenosideeffects class android.util.Log {

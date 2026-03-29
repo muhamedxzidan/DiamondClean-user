@@ -16,6 +16,7 @@ class WhatsAppUtils {
   /// Sends the order details to the **customer's** WhatsApp number.
   static Future<void> launch({
     required int serialNumber,
+    required String customerCode,
     required String customerName,
     required String phone,
     required String address,
@@ -25,6 +26,9 @@ class WhatsAppUtils {
   }) async {
     final StringBuffer message = StringBuffer();
     message.writeln(AppStrings.whatsappMessageHeader);
+    message.writeln(AppStrings.whatsappMessageSeparator);
+    message.writeln('${AppStrings.whatsappCustomerCodePrefix}$customerCode');
+    message.writeln(AppStrings.whatsappOrderReceivedSuccess);
     message.writeln(AppStrings.whatsappMessageSeparator);
     message.writeln('${AppStrings.whatsappOrderNumberPrefix}$serialNumber');
     message.writeln('${AppStrings.whatsappCustomerPrefix}$customerName');

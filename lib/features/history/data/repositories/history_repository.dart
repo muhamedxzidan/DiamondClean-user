@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:intl/intl.dart';
+import 'package:kimo_clean/core/constants/firebase_constants.dart';
 import 'package:kimo_clean/features/history/data/models/order_model.dart';
 import 'package:kimo_clean/core/constants/app_strings.dart';
 
@@ -21,7 +21,7 @@ class HistoryRepository {
   Stream<List<OrderModel>> watchTodayOrdersByCar(String carNumber) {
     try {
       return _firestore
-          .collection('orders')
+          .collection(FirebaseCollections.orders)
           .where('carNumber', isEqualTo: carNumber)
           .snapshots()
           .map((snapshot) {
@@ -31,32 +31,7 @@ class HistoryRepository {
               );
 
             return docs
-                .map((doc) {
-                  final data = doc.data();
-                  final serialNumber = data['serialNumber'];
-                  final serialText = serialNumber is int
-                      ? '#$serialNumber'
-                      : (serialNumber as String?) ?? '#';
-
-                  final createdAt = data['createdAt'] as Timestamp?;
-                  final formattedTime = createdAt == null
-                      ? ''
-                      : DateFormat('hh:mm a').format(createdAt.toDate());
-
-                  final formattedDate = createdAt == null
-                      ? ''
-                      : DateFormat('yyyy-MM-dd').format(createdAt.toDate());
-
-                  return OrderModel(
-                    customerName:
-                        data['customerName'] as String? ?? AppStrings.unknown,
-                    serialNumber: serialText,
-                    totalPieces: (data['totalPieces'] as num?)?.toInt() ?? 0,
-                    time: formattedTime,
-                    date: formattedDate,
-                    status: data['status'] as String? ?? AppStrings.unknown,
-                  );
-                })
+                .map((doc) => OrderModel.fromFirestore(doc.data()))
                 .toList(growable: false);
           });
     } on FirebaseException catch (e) {

@@ -45,6 +45,17 @@ class HistoryOrderCard extends StatelessWidget {
             const SizedBox(height: 12),
             Row(
               children: [
+                Icon(Icons.badge_outlined, size: 20, color: AppColors.grey600),
+                const SizedBox(width: 8),
+                Text(
+                  '${AppStrings.customerCodeLabel}: ${order.customerCode}',
+                  style: TextStyle(fontSize: 14, color: AppColors.grey700),
+                ),
+              ],
+            ),
+            const SizedBox(height: 10),
+            Row(
+              children: [
                 Icon(Icons.layers_rounded, size: 20, color: AppColors.grey600),
                 const SizedBox(width: 8),
                 Text(

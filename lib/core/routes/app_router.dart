@@ -27,13 +27,16 @@ class AppRouter {
         return MaterialPageRoute(builder: (_) => const HomeScreen());
 
       case Routes.newOrder:
+        final initialLookupQuery = settings.arguments is String
+            ? settings.arguments as String
+            : null;
         return MaterialPageRoute(
           builder: (context) => BlocProvider(
             create: (ctx) => NewOrderCubit(
               authRepository: ctx.read<AuthRepository>(),
               orderRepository: ctx.read<OrderRepository>(),
             ),
-            child: const NewOrderScreen(),
+            child: NewOrderScreen(initialLookupQuery: initialLookupQuery),
           ),
         );
 
@@ -73,7 +76,7 @@ class AppRouter {
   Route _errorRoute() {
     return MaterialPageRoute(
       builder: (_) => Scaffold(
-        appBar: AppBar(title: const Text('Error')),
+        appBar: AppBar(title: const Text(AppStrings.errorTitle)),
         body: const Center(child: Text(AppStrings.pageNotFound)),
       ),
     );

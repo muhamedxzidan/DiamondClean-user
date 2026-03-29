@@ -31,7 +31,6 @@ class _LoginFormState extends State<LoginForm> {
 
   void _onLoginPressed() {
     if (!_formKey.currentState!.validate()) return;
-
     context.read<AuthCubit>().login(
       agentName: _agentNameController.text.trim(),
       carNumber: _carNumberController.text.trim(),
@@ -72,7 +71,6 @@ class _LoginFormState extends State<LoginForm> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              // ── Agent Name ──
               TextFormField(
                 controller: _agentNameController,
                 textInputAction: TextInputAction.next,
@@ -80,16 +78,11 @@ class _LoginFormState extends State<LoginForm> {
                   labelText: AppStrings.agentNameLabel,
                   prefixIcon: Icon(Icons.person),
                 ),
-                validator: (value) {
-                  if (value == null || value.trim().isEmpty) {
-                    return AppStrings.agentNameValidation;
-                  }
-                  return null;
-                },
+                validator: (value) => (value == null || value.trim().isEmpty)
+                    ? AppStrings.agentNameValidation
+                    : null,
               ),
               const SizedBox(height: 16),
-
-              // ── Car Number ──
               TextFormField(
                 controller: _carNumberController,
                 textInputAction: TextInputAction.next,
@@ -97,16 +90,11 @@ class _LoginFormState extends State<LoginForm> {
                   labelText: AppStrings.carNumberLabel,
                   prefixIcon: Icon(Icons.directions_car),
                 ),
-                validator: (value) {
-                  if (value == null || value.trim().isEmpty) {
-                    return AppStrings.carNumberValidation;
-                  }
-                  return null;
-                },
+                validator: (value) => (value == null || value.trim().isEmpty)
+                    ? AppStrings.carNumberValidation
+                    : null,
               ),
               const SizedBox(height: 16),
-
-              // ── Password ──
               ValueListenableBuilder<bool>(
                 valueListenable: _obscurePassword,
                 builder: (context, obscure, child) {
@@ -128,17 +116,14 @@ class _LoginFormState extends State<LoginForm> {
                       ),
                     ),
                     validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return AppStrings.passwordValidation;
-                      }
-                      return null;
+                      return (value == null || value.isEmpty)
+                          ? AppStrings.passwordValidation
+                          : null;
                     },
                   );
                 },
               ),
               const SizedBox(height: 32),
-
-              // ── Login Button ──
               ElevatedButton(
                 onPressed: isLoading ? null : _onLoginPressed,
                 child: isLoading

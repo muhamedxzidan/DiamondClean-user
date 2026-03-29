@@ -11,18 +11,37 @@ final class NewOrderInitial extends NewOrderState {}
 final class NewOrderPhoneLookupLoading extends NewOrderState {}
 
 final class NewOrderPhoneLookupSuccess extends NewOrderState {
+  final String phone;
   final String customerName;
   final String address;
+  final String customerCode;
   final int? customerSerial;
 
   NewOrderPhoneLookupSuccess({
+    required this.phone,
     required this.customerName,
     required this.address,
+    required this.customerCode,
     this.customerSerial,
   });
 
   @override
-  List<Object?> get props => [customerName, address, customerSerial];
+  List<Object?> get props => [
+    phone,
+    customerName,
+    address,
+    customerCode,
+    customerSerial,
+  ];
+}
+
+final class NewOrderCustomerLookupNotFound extends NewOrderState {
+  final String query;
+
+  NewOrderCustomerLookupNotFound(this.query);
+
+  @override
+  List<Object?> get props => [query];
 }
 
 final class NewOrderItemsUpdated extends NewOrderState {
@@ -39,6 +58,7 @@ final class NewOrderSaveLoading extends NewOrderState {}
 
 final class NewOrderSaveSuccess extends NewOrderState {
   final int serialNumber;
+  final String customerCode;
   final String customerName;
   final String phone;
   final String address;
@@ -48,6 +68,7 @@ final class NewOrderSaveSuccess extends NewOrderState {
 
   NewOrderSaveSuccess({
     required this.serialNumber,
+    required this.customerCode,
     required this.customerName,
     required this.phone,
     required this.address,
@@ -59,6 +80,7 @@ final class NewOrderSaveSuccess extends NewOrderState {
   @override
   List<Object?> get props => [
     serialNumber,
+    customerCode,
     customerName,
     phone,
     address,
