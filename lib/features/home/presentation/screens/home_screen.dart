@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:kimo_clean/core/routes/routes.dart';
-import 'package:kimo_clean/features/home/presentation/widgets/home_drawer.dart';
 import 'package:kimo_clean/core/constants/app_strings.dart';
+import 'package:kimo_clean/core/routes/routes.dart';
+import 'package:kimo_clean/core/utils/phone_utils.dart';
+import 'package:kimo_clean/features/home/presentation/widgets/home_drawer.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -20,12 +21,8 @@ class _HomeScreenState extends State<HomeScreen> {
     super.dispose();
   }
 
-  String _digitsOnly(String value) {
-    return value.replaceAll(RegExp(r'[^0-9]'), '');
-  }
-
   void _navigateToNewOrderWithSearch() {
-    final numericInput = _digitsOnly(_searchController.text);
+    final numericInput = normalizePhone(_searchController.text);
     if (numericInput.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(

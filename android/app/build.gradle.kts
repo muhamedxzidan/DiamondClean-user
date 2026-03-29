@@ -29,16 +29,18 @@ android {
         versionName = flutter.versionName
     }
 
-    buildTypes {
+buildTypes {
         release {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
+            // استخدام مفتاح الديباج مؤقتاً عشان يشتغل معاك APK حالياً
             signingConfig = signingConfigs.getByName("debug")
             
-            isMinifyEnabled = true
-            isShrinkResources = true
+            // تعطيل ضغط الكود والمصادر لحل مشكلة الكراش
+            isMinifyEnabled = false
+            isShrinkResources = false
+            
             isDebuggable = false
             isJniDebuggable = false
+            
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"

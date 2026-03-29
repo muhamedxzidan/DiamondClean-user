@@ -11,6 +11,7 @@ class FirebaseServiceException implements Exception {
   String toString() => message;
 }
 
+/// Shared result type for order creation — used by [OrderRepository].
 class OrderCreationResult {
   final int serialNumber;
   final String customerCode;
@@ -56,48 +57,6 @@ class FirebaseService {
       );
     } catch (_) {
       throw FirebaseServiceException(AppStrings.errorCheckingCar);
-    }
-  }
-
-  Future<OrderCreationResult> createNewOrder({
-    required String phone,
-    required String name,
-    required String address,
-    required Map<String, int> items,
-    required int totalPieces,
-    required String carNumber,
-    required String driverName,
-  }) async {
-    try {
-      final result = await createNewOrderOperation(
-        firestore: _firestore,
-        phone: phone,
-        name: name,
-        address: address,
-        items: items,
-        totalPieces: totalPieces,
-        carNumber: carNumber,
-        driverName: driverName,
-      );
-      return OrderCreationResult(
-        serialNumber: result.$1,
-        customerCode: result.$2,
-      );
-    } on FirebaseException catch (e) {
-      final userMessage = switch (e.code) {
-        'permission-denied' => AppStrings.errorPermissionDeniedOrder,
-        'unavailable' ||
-        'deadline-exceeded' => AppStrings.errorServerUnavailable,
-        'not-found' => AppStrings.errorDatabaseConfig,
-        'aborted' => AppStrings.errorConflictSaving,
-        _ =>
-          '${AppStrings.errorFailedToSaveOrderPrefix} ${e.message ?? e.code}',
-      };
-      throw FirebaseServiceException(userMessage);
-    } catch (e) {
-      throw FirebaseServiceException(
-        '${AppStrings.errorUnexpectedSaving} ($e)',
-      );
     }
   }
 }

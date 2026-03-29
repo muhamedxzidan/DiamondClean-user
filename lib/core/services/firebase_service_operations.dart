@@ -1,53 +1,31 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:kimo_clean/core/constants/app_strings.dart';
 import 'package:kimo_clean/core/constants/firebase_constants.dart';
-
-String _normalizePhoneValue(String phone) {
-  return phone.replaceAll(RegExp(r'[^0-9]'), '');
-}
-
-String _buildCustomerCodeValue(int customerSerial) {
-  return 'KC-${customerSerial.toString().padLeft(5, '0')}';
-}
+import 'package:kimo_clean/core/utils/phone_utils.dart';
 
 Future<Map<String, dynamic>?> checkCustomerExistsOperation({
   required FirebaseFirestore firestore,
   required String phoneOrCode,
 }) async {
   final rawValue = phoneOrCode.trim();
-  final normalizedPhone = _normalizePhoneValue(rawValue);
+  final phone = normalizePhone(rawValue);
 
-  if (normalizedPhone.length == 11) {
-    final docSnapshot = await firestore
+  // ── Phone input (11 digits) — lookup by doc ID only.
+  // Doc ID is the phone number, so one read is enough.
+  if (phone.length == 11) {
+    final doc = await firestore
         .collection(FirebaseCollections.customers)
-        .doc(normalizedPhone)
+        .doc(phone)
         .get();
-    if (docSnapshot.exists) {
-      return docSnapshot.data();
-    }
+    return doc.exists ? doc.data() : null;
   }
 
-  final byCodeSnapshot = await firestore
+  // ── Non-phone input — lookup by customerCode field (e.g. "KC-00001").
+  final byCode = await firestore
       .collection(FirebaseCollections.customers)
       .where('customerCode', isEqualTo: rawValue.toUpperCase())
       .limit(1)
       .get();
-
-  if (byCodeSnapshot.docs.isNotEmpty) {
-    return byCodeSnapshot.docs.first.data();
-  }
-
-  if (normalizedPhone.length == 11) {
-    final byPhoneFieldSnapshot = await firestore
-        .collection(FirebaseCollections.customers)
-        .where('phoneNumber', isEqualTo: normalizedPhone)
-        .limit(1)
-        .get();
-
-    if (byPhoneFieldSnapshot.docs.isNotEmpty) {
-      return byPhoneFieldSnapshot.docs.first.data();
-    }
-  }
+  if (byCode.docs.isNotEmpty) return byCode.docs.first.data();
 
   return null;
 }
@@ -57,40 +35,32 @@ Future<List<Map<String, dynamic>>> searchOrdersByCustomerIdentifierOperation({
   required String phoneOrCode,
 }) async {
   final rawValue = phoneOrCode.trim();
-  final normalizedPhone = _normalizePhoneValue(rawValue);
+  final phone = normalizePhone(rawValue);
   final matchedDocs = <QueryDocumentSnapshot<Map<String, dynamic>>>[];
   final seenDocIds = <String>{};
 
-  if (normalizedPhone.isNotEmpty) {
-    final byPhoneSnapshot = await firestore
+  if (phone.isNotEmpty) {
+    final byPhone = await firestore
         .collection(FirebaseCollections.orders)
-        .where('customerPhone', isEqualTo: normalizedPhone)
+        .where('customerPhone', isEqualTo: phone)
         .get();
-
-    for (final doc in byPhoneSnapshot.docs) {
-      if (seenDocIds.add(doc.id)) {
-        matchedDocs.add(doc);
-      }
+    for (final doc in byPhone.docs) {
+      if (seenDocIds.add(doc.id)) matchedDocs.add(doc);
     }
   }
 
-  final byCodeSnapshot = await firestore
+  final byCode = await firestore
       .collection(FirebaseCollections.orders)
       .where('customerCode', isEqualTo: rawValue.toUpperCase())
       .get();
-
-  for (final doc in byCodeSnapshot.docs) {
-    if (seenDocIds.add(doc.id)) {
-      matchedDocs.add(doc);
-    }
+  for (final doc in byCode.docs) {
+    if (seenDocIds.add(doc.id)) matchedDocs.add(doc);
   }
 
   matchedDocs.sort((a, b) {
-    final aTimestamp = a.data()['createdAt'] as Timestamp?;
-    final bTimestamp = b.data()['createdAt'] as Timestamp?;
-    return (bTimestamp?.millisecondsSinceEpoch ?? 0).compareTo(
-      aTimestamp?.millisecondsSinceEpoch ?? 0,
-    );
+    final aMs = (a.data()['createdAt'] as Timestamp?)?.millisecondsSinceEpoch ?? 0;
+    final bMs = (b.data()['createdAt'] as Timestamp?)?.millisecondsSinceEpoch ?? 0;
+    return bMs.compareTo(aMs);
   });
 
   return matchedDocs.map((doc) => doc.data()).toList(growable: false);
@@ -100,110 +70,10 @@ Future<bool> checkCarIsActiveOperation({
   required FirebaseFirestore firestore,
   required String carNumber,
 }) async {
-  final docSnapshot = await firestore
+  final doc = await firestore
       .collection(FirebaseCollections.cars)
       .doc(carNumber)
       .get();
-  if (docSnapshot.exists && docSnapshot.data() != null) {
-    return docSnapshot.data()!['isActive'] as bool? ?? false;
-  }
-  return false;
-}
-
-Future<(int serialNumber, String customerCode)> createNewOrderOperation({
-  required FirebaseFirestore firestore,
-  required String phone,
-  required String name,
-  required String address,
-  required Map<String, int> items,
-  required int totalPieces,
-  required String carNumber,
-  required String driverName,
-}) async {
-  final normalizedPhone = _normalizePhoneValue(phone);
-  final counterRef = firestore
-      .collection(FirebaseCollections.counters)
-      .doc(FirebaseDocumentIds.orderCounter);
-  final customerCounterRef = firestore
-      .collection(FirebaseCollections.counters)
-      .doc(FirebaseDocumentIds.customerCounter);
-  final newOrderRef = firestore.collection(FirebaseCollections.orders).doc();
-  final customerRef = firestore
-      .collection(FirebaseCollections.customers)
-      .doc(normalizedPhone);
-
-  return firestore.runTransaction<(int, String)>((transaction) async {
-    final counterSnapshot = await transaction.get(counterRef);
-    int lastOrderId = 0;
-    if (counterSnapshot.exists && counterSnapshot.data() != null) {
-      final data = counterSnapshot.data()!;
-      lastOrderId = (data['last_order_id'] as int?) ?? 0;
-    }
-    final serialNumber = lastOrderId + 1;
-
-    final customerSnapshot = await transaction.get(customerRef);
-    final existingCustomerData = customerSnapshot.data();
-
-    int customerSerial = 0;
-    String customerCode = '';
-
-    if (customerSnapshot.exists && existingCustomerData != null) {
-      customerSerial =
-          (existingCustomerData['customerSerial'] as num?)?.toInt() ?? 0;
-      customerCode = (existingCustomerData['customerCode'] as String? ?? '')
-          .trim();
-    }
-
-    if (customerSerial == 0) {
-      final customerCounterSnapshot = await transaction.get(customerCounterRef);
-      int lastCustomerId = 0;
-      if (customerCounterSnapshot.exists &&
-          customerCounterSnapshot.data() != null) {
-        final customerCounterData = customerCounterSnapshot.data()!;
-        lastCustomerId =
-            (customerCounterData['last_customer_id'] as num?)?.toInt() ?? 0;
-      }
-
-      customerSerial = lastCustomerId + 1;
-      transaction.set(customerCounterRef, {
-        'last_customer_id': customerSerial,
-      }, SetOptions(merge: true));
-    }
-
-    if (customerCode.isEmpty) {
-      customerCode = _buildCustomerCodeValue(customerSerial);
-    }
-
-    transaction.set(counterRef, {
-      'last_order_id': serialNumber,
-    }, SetOptions(merge: true));
-
-    transaction.set(customerRef, {
-      'name': name,
-      'address': address,
-      'phone': normalizedPhone,
-      'phoneNumber': normalizedPhone,
-      'customerCode': customerCode,
-      'customerSerial': customerSerial,
-      'lastOrderDate': FieldValue.serverTimestamp(),
-    }, SetOptions(merge: true));
-
-    transaction.set(newOrderRef, {
-      'serialNumber': serialNumber,
-      'customerPhone': normalizedPhone,
-      'customerPhoneNumber': normalizedPhone,
-      'customerCode': customerCode,
-      'customerSerial': customerSerial,
-      'customerName': name,
-      'customerAddress': address,
-      'items': items,
-      'totalPieces': totalPieces,
-      'carNumber': carNumber,
-      'driverName': driverName,
-      'status': AppStrings.statusReceived,
-      'createdAt': FieldValue.serverTimestamp(),
-    });
-
-    return (serialNumber, customerCode);
-  });
+  if (!doc.exists || doc.data() == null) return false;
+  return doc.data()!['isActive'] as bool? ?? false;
 }

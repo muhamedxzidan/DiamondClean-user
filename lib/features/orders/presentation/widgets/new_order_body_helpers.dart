@@ -10,10 +10,6 @@ class NewOrderUiSession {
   String? pendingCodeLookup;
 }
 
-String digitsOnly(String value) {
-  return value.replaceAll(RegExp(r'[^0-9]'), '');
-}
-
 String buildLookupSuggestion(NewOrderState state, {String? pendingCodeLookup}) {
   if (state is NewOrderPhoneLookupLoading) {
     if (pendingCodeLookup != null && pendingCodeLookup.isNotEmpty) {

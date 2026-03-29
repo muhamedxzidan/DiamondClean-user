@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:kimo_clean/core/utils/phone_utils.dart';
 import 'package:kimo_clean/features/orders/cubit/new_order_cubit.dart';
 import 'package:kimo_clean/features/orders/cubit/new_order_state.dart';
 import 'package:kimo_clean/features/orders/presentation/widgets/new_order_body_helpers.dart';
@@ -25,17 +26,13 @@ class _NewOrderBodyState extends State<NewOrderBody> {
   @override
   void initState() {
     super.initState();
-    final initialLookupQuery = widget.initialLookupQuery?.trim();
-    if (initialLookupQuery == null || initialLookupQuery.isEmpty) {
-      return;
-    }
+    final initialQuery = widget.initialLookupQuery?.trim();
+    if (initialQuery == null || initialQuery.isEmpty) return;
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) return;
-      final normalized = digitsOnly(initialLookupQuery);
-      if (normalized.isEmpty) {
-        return;
-      }
+      final normalized = normalizePhone(initialQuery);
+      if (normalized.isEmpty) return;
 
       if (normalized.length == 11) {
         _phoneController.text = normalized;
@@ -67,18 +64,17 @@ class _NewOrderBodyState extends State<NewOrderBody> {
   }
 
   void _triggerAutoLookup(String value) {
-    final digits = digitsOnly(value);
+    final digits = normalizePhone(value);
     if (digits.length != 11) {
       _clearAutofilledCustomerData();
       return;
     }
-
     _uiSession.pendingCodeLookup = null;
     context.read<NewOrderCubit>().lookupCustomer(digits);
   }
 
   void _onPhoneChanged(String value) {
-    final digits = digitsOnly(value);
+    final digits = normalizePhone(value);
     if (digits != value) {
       _phoneController.value = TextEditingValue(
         text: digits,
@@ -129,7 +125,6 @@ class _NewOrderBodyState extends State<NewOrderBody> {
                 ),
                 isLookupLoading: state is NewOrderPhoneLookupLoading,
                 onPhoneChanged: _onPhoneChanged,
-                digitsOnly: digitsOnly,
                 onSavePressed: () {
                   if (_formKey.currentState?.validate() ?? false) {
                     context.read<NewOrderCubit>().saveOrder(

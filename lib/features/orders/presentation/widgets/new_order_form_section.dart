@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:kimo_clean/core/constants/app_strings.dart';
+import 'package:kimo_clean/core/utils/phone_utils.dart';
 import 'package:kimo_clean/features/orders/presentation/widgets/new_order_items_card.dart';
 import 'package:kimo_clean/features/orders/presentation/widgets/new_order_submit_button.dart';
 
@@ -13,7 +14,6 @@ class NewOrderFormSection extends StatelessWidget {
   final String lookupSuggestion;
   final bool isLookupLoading;
   final ValueChanged<String> onPhoneChanged;
-  final String Function(String) digitsOnly;
   final VoidCallback onSavePressed;
 
   const NewOrderFormSection({
@@ -26,7 +26,6 @@ class NewOrderFormSection extends StatelessWidget {
     required this.lookupSuggestion,
     required this.isLookupLoading,
     required this.onPhoneChanged,
-    required this.digitsOnly,
     required this.onSavePressed,
   });
 
@@ -47,13 +46,9 @@ class NewOrderFormSection extends StatelessWidget {
             prefixIcon: Icon(Icons.phone),
           ),
           validator: (value) {
-            final normalizedPhone = digitsOnly(value ?? '');
-            if (normalizedPhone.isEmpty) {
-              return AppStrings.requiredValidation;
-            }
-            if (normalizedPhone.length != 11) {
-              return AppStrings.phoneLengthValidation;
-            }
+            final phone = normalizePhone(value ?? '');
+            if (phone.isEmpty) return AppStrings.requiredValidation;
+            if (phone.length != 11) return AppStrings.phoneLengthValidation;
             return null;
           },
         ),

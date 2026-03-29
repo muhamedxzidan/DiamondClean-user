@@ -1,5 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kimo_clean/core/constants/app_strings.dart';
+import 'package:kimo_clean/core/utils/phone_utils.dart';
 import 'package:kimo_clean/features/auth/data/repositories/auth_repository.dart';
 import 'package:kimo_clean/features/orders/cubit/new_order_state.dart';
 import 'package:kimo_clean/features/orders/cubit/order_items_manager.dart';
@@ -27,8 +28,6 @@ class NewOrderCubit extends Cubit<NewOrderState> {
 
   int get totalPieces => _itemsManager.totalPieces;
   int quantityFor(String itemName) => _itemsManager.quantityFor(itemName);
-  String _normalizePhone(String phone) =>
-      phone.replaceAll(RegExp(r'[^0-9]'), '');
   void _emitItemsUpdated() => emit(
     NewOrderItemsUpdated(
       items: _itemsManager.itemsList,
@@ -37,7 +36,7 @@ class NewOrderCubit extends Cubit<NewOrderState> {
   );
 
   Future<void> lookupCustomer(String phoneOrCode) async {
-    final numericQuery = _normalizePhone(phoneOrCode);
+    final numericQuery = normalizePhone(phoneOrCode);
     if (numericQuery.isEmpty) return;
     emit(NewOrderPhoneLookupLoading());
 
@@ -80,7 +79,7 @@ class NewOrderCubit extends Cubit<NewOrderState> {
     required String address,
     String? notes,
   }) async {
-    final normalizedPhone = _normalizePhone(phone);
+    final normalizedPhone = normalizePhone(phone);
     if (normalizedPhone.length != 11) {
       emit(NewOrderValidationError(AppStrings.phoneLengthValidation));
       return;
