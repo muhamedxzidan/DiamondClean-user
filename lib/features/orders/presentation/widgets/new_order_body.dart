@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:cpc_clean_user/core/constants/app_constants.dart';
 import 'package:cpc_clean_user/core/utils/phone_utils.dart';
 import 'package:cpc_clean_user/features/orders/cubit/new_order_cubit.dart';
 import 'package:cpc_clean_user/features/orders/cubit/new_order_state.dart';
@@ -34,7 +35,7 @@ class _NewOrderBodyState extends State<NewOrderBody> {
       final normalized = normalizePhone(initialQuery);
       if (normalized.isEmpty) return;
 
-      if (normalized.length == 11) {
+      if (normalized.length == AppConstants.egyptPhoneLength) {
         _phoneController.text = normalized;
         _triggerAutoLookup(normalized);
       } else {
@@ -65,7 +66,7 @@ class _NewOrderBodyState extends State<NewOrderBody> {
 
   void _triggerAutoLookup(String value) {
     final digits = normalizePhone(value);
-    if (digits.length != 11) {
+    if (digits.length != AppConstants.egyptPhoneLength) {
       _clearAutofilledCustomerData();
       return;
     }
@@ -76,13 +77,12 @@ class _NewOrderBodyState extends State<NewOrderBody> {
   void _onPhoneChanged(String value) {
     final digits = normalizePhone(value);
     if (digits != value) {
-      _phoneController.value = TextEditingValue(
-        text: digits,
-        selection: TextSelection.collapsed(offset: digits.length),
-      );
+      _phoneController
+        ..text = digits
+        ..selection = TextSelection.collapsed(offset: digits.length);
     }
 
-    if (digits.length == 11) {
+    if (digits.length == AppConstants.egyptPhoneLength) {
       _triggerAutoLookup(digits);
       return;
     }

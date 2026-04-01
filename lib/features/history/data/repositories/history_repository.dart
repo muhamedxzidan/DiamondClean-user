@@ -22,7 +22,7 @@ class HistoryRepository {
     try {
       return _firestore
           .collection(FirebaseCollections.orders)
-          .where('carNumber', isEqualTo: carNumber)
+          .where(FirestoreFields.carNumber, isEqualTo: carNumber)
           .snapshots()
           .map((snapshot) {
             final docs = [...snapshot.docs]
@@ -50,7 +50,7 @@ class HistoryRepository {
   }
 
   int _createdAtMillis(QueryDocumentSnapshot<Map<String, dynamic>> doc) {
-    final timestamp = doc.data()['createdAt'] as Timestamp?;
+    final timestamp = doc.data()[FirestoreFields.createdAt] as Timestamp?;
     return timestamp?.millisecondsSinceEpoch ?? 0;
   }
 }

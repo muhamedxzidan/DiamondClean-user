@@ -48,9 +48,14 @@ class HistoryCubit extends Cubit<HistoryState> {
               rawGroups.putIfAbsent(dateKey, () => []).add(order);
             }
 
-            // Map is unsorted intrinsically, sort the keys descending (newest first)
+            // Sort keys chronologically descending (newest first)
             final sortedKeys = rawGroups.keys.toList()
-              ..sort((a, b) => b.compareTo(a));
+              ..sort((a, b) {
+                final dateA = DateTime.tryParse(a);
+                final dateB = DateTime.tryParse(b);
+                if (dateA == null || dateB == null) return 0;
+                return dateB.compareTo(dateA);
+              });
 
             final Map<String, List<OrderModel>> sortedGroups = {};
             for (var key in sortedKeys) {

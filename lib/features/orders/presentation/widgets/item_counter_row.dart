@@ -23,8 +23,12 @@ class ItemCounterRow extends StatelessWidget {
           // Counter UI
           BlocSelector<NewOrderCubit, NewOrderState, int>(
             selector: (state) {
-              // We retrieve the current quantity from the cubit during state changes.
-              return context.read<NewOrderCubit>().quantityFor(itemName);
+              if (state is NewOrderItemsUpdated) {
+                return state.items
+                    .where((item) => item.name == itemName)
+                    .fold(0, (_, item) => item.quantity);
+              }
+              return 0;
             },
             builder: (context, currentCount) {
               return Row(

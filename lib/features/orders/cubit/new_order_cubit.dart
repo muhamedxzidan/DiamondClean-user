@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:cpc_clean_user/core/constants/app_constants.dart';
 import 'package:cpc_clean_user/core/constants/app_strings.dart';
 import 'package:cpc_clean_user/core/utils/phone_utils.dart';
 import 'package:cpc_clean_user/features/auth/data/repositories/auth_repository.dart';
@@ -80,7 +81,7 @@ class NewOrderCubit extends Cubit<NewOrderState> {
     String? notes,
   }) async {
     final normalizedPhone = normalizePhone(phone);
-    if (normalizedPhone.length != 11) {
+    if (normalizedPhone.length != AppConstants.egyptPhoneLength) {
       emit(NewOrderValidationError(AppStrings.phoneLengthValidation));
       return;
     }

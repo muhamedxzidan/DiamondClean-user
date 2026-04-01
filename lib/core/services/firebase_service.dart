@@ -31,6 +31,8 @@ class FirebaseService {
         firestore: _firestore,
         phoneOrCode: phoneOrCode,
       );
+    } on FirebaseServiceException {
+      rethrow;
     } catch (_) {
       throw FirebaseServiceException(AppStrings.errorCheckingCustomer);
     }
@@ -44,6 +46,8 @@ class FirebaseService {
         firestore: _firestore,
         phoneOrCode: phoneOrCode,
       );
+    } on FirebaseServiceException {
+      rethrow;
     } catch (_) {
       throw FirebaseServiceException(AppStrings.failedToLoadOrdersDb);
     }
@@ -55,6 +59,8 @@ class FirebaseService {
         firestore: _firestore,
         carNumber: carNumber,
       );
+    } on FirebaseServiceException {
+      rethrow;
     } catch (_) {
       throw FirebaseServiceException(AppStrings.errorCheckingCar);
     }

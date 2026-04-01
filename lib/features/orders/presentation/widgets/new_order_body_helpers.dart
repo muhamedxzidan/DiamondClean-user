@@ -13,7 +13,7 @@ class NewOrderUiSession {
 String buildLookupSuggestion(NewOrderState state, {String? pendingCodeLookup}) {
   if (state is NewOrderPhoneLookupLoading) {
     if (pendingCodeLookup != null && pendingCodeLookup.isNotEmpty) {
-      return '${AppStrings.lookupSearchingByCodePrefix} KC-$pendingCodeLookup';
+      return '${AppStrings.lookupSearchingByCodePrefix} CPC-$pendingCodeLookup';
     }
     return AppStrings.lookupSearchingByPhone;
   }
@@ -26,7 +26,7 @@ String buildLookupSuggestion(NewOrderState state, {String? pendingCodeLookup}) {
     if (state.query.length == 11) {
       return AppStrings.lookupNotFoundByPhone;
     }
-    return '${AppStrings.lookupNotFoundByCodePrefix} KC-${state.query}';
+    return '${AppStrings.lookupNotFoundByCodePrefix} CPC-${state.query}';
   }
 
   return '';

@@ -1,4 +1,8 @@
+import 'dart:async';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'package:cpc_clean_user/core/constants/app_strings.dart';
 import 'package:cpc_clean_user/features/auth/data/repositories/auth_repository.dart';
 import 'package:cpc_clean_user/features/auth/cubit/auth_state.dart';
 
@@ -14,17 +18,21 @@ class AuthCubit extends Cubit<AuthState> {
     emit(const AuthLoading());
 
     try {
-      final agentName = await _authRepository.getSavedAgentName();
-      final carNumber = await _authRepository.getSavedCarNumber();
+      final results = await Future.wait([
+        _authRepository.getSavedAgentName(),
+        _authRepository.getSavedCarNumber(),
+      ]);
+      final agentName = results[0];
+      final carNumber = results[1];
 
-      // No saved session → go to login
       if (carNumber == null || carNumber.isEmpty) {
         emit(const AuthUnauthenticated());
         return;
       }
 
-      // Session exists → verify car is still active
-      final isActive = await _authRepository.checkCarStatus(carNumber);
+      final isActive = await _authRepository
+          .checkCarStatus(carNumber)
+          .timeout(const Duration(seconds: 10));
 
       if (isActive) {
         emit(
@@ -36,12 +44,12 @@ class AuthCubit extends Cubit<AuthState> {
           ),
         );
       } else {
-        // Admin deactivated the car → force logout
         await _authRepository.logout();
         emit(const AuthDeactivated());
       }
+    } on TimeoutException {
+      emit(const AuthUnauthenticated());
     } catch (_) {
-      // Fail-safe: if anything goes wrong, send to login
       emit(const AuthUnauthenticated());
     }
   }
@@ -63,6 +71,8 @@ class AuthCubit extends Cubit<AuthState> {
       emit(AuthAuthenticated(agentName: agentName, carNumber: carNumber));
     } on AuthException catch (e) {
       emit(AuthError(e.message));
+    } catch (_) {
+      emit(const AuthError(AppStrings.unexpectedError));
     }
   }
 

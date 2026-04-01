@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:cpc_clean_user/core/constants/app_constants.dart';
 import 'package:cpc_clean_user/core/constants/app_strings.dart';
 import 'package:cpc_clean_user/core/routes/routes.dart';
 import 'package:cpc_clean_user/core/utils/phone_utils.dart';
@@ -34,7 +35,7 @@ class _HomeScreenState extends State<HomeScreen> {
       return;
     }
 
-    final String preparedQuery = numericInput.length == 11
+    final String preparedQuery = numericInput.length == AppConstants.egyptPhoneLength
         ? numericInput
         : 'KC-$numericInput';
 

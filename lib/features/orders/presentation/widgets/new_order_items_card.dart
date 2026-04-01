@@ -33,7 +33,7 @@ class NewOrderItemsCard extends StatelessWidget {
             }),
             const Divider(height: 24),
             BlocSelector<NewOrderCubit, NewOrderState, int>(
-              selector: (state) => context.read<NewOrderCubit>().totalPieces,
+              selector: (state) => state is NewOrderItemsUpdated ? state.totalPieces : 0,
               builder: (context, totalPieces) {
                 return Container(
                   width: double.infinity,

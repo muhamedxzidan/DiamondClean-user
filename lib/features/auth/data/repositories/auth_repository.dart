@@ -76,13 +76,13 @@ class AuthRepository {
       final data = carDoc.data()!;
 
       // Validate password
-      final storedPassword = data['password'] as String? ?? '';
+      final storedPassword = data[FirestoreFields.password] as String? ?? '';
       if (storedPassword != password) {
         throw const InvalidPasswordException();
       }
 
       // Validate active status
-      final isActive = data['isActive'] as bool? ?? false;
+      final isActive = data[FirestoreFields.isActive] as bool? ?? false;
       if (!isActive) {
         throw const CarInactiveException();
       }
@@ -123,7 +123,7 @@ class AuthRepository {
 
       if (!carDoc.exists || carDoc.data() == null) return false;
 
-      return carDoc.data()!['isActive'] as bool? ?? false;
+      return carDoc.data()![FirestoreFields.isActive] as bool? ?? false;
     } catch (_) {
       return false; // Fail-safe: treat as inactive on error
     }

@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cpc_clean_user/core/constants/app_constants.dart';
 import 'package:cpc_clean_user/core/constants/app_strings.dart';
 import 'package:cpc_clean_user/core/constants/firebase_constants.dart';
 import 'package:cpc_clean_user/core/services/firebase_service.dart';
@@ -14,8 +15,8 @@ class OrderRepositoryException implements Exception {
   String toString() => message;
 }
 
-/// Formats an integer serial into the canonical customer code, e.g. "KC-1".
-String _buildCustomerCode(int serial) => 'KC-$serial';
+/// Formats an integer serial into the canonical customer code, e.g. "CPC-1".
+String _buildCustomerCode(int serial) => 'CPC-$serial';
 
 class OrderRepository {
   final FirebaseService _firebaseService;
@@ -31,7 +32,7 @@ class OrderRepository {
   ///
   /// Input is always pure digits:
   ///   - 11 digits  → phone lookup via [FirebaseService.checkCustomerExists].
-  ///   - other      → customer-code lookup (prepends "KC-").
+  ///   - other      → customer-code lookup (prepends "CPC-").
   Future<CustomerLookupModel?> lookupCustomer(String phoneOrCode) async {
     try {
       final input = normalizePhone(phoneOrCode);
@@ -39,13 +40,13 @@ class OrderRepository {
 
       Map<String, dynamic>? data;
 
-      if (input.length == 11) {
+      if (input.length == AppConstants.egyptPhoneLength) {
         // Delegate to service which handles doc-ID + field fallback queries.
         data = await _firebaseService.checkCustomerExists(input);
       } else {
         final snapshot = await _firestore
             .collection(FirebaseCollections.customers)
-            .where('customerCode', isEqualTo: 'KC-$input')
+            .where(FirestoreFields.customerCode, isEqualTo: 'CPC-$input')
             .limit(1)
             .get();
         if (snapshot.docs.isNotEmpty) data = snapshot.docs.first.data();
@@ -145,8 +146,8 @@ class OrderRepository {
       final customerSnap = await tx.get(customerRef);
       final existing = customerSnap.data();
 
-      int customerSerial = (existing?['customerSerial'] as num?)?.toInt() ?? 0;
-      String customerCode = (existing?['customerCode'] as String? ?? '').trim();
+      int customerSerial = (existing?[FirestoreFields.customerSerial] as num?)?.toInt() ?? 0;
+      String customerCode = (existing?[FirestoreFields.customerCode] as String? ?? '').trim();
 
       if (customerSerial == 0) {
         final ccSnap = await tx.get(customerCounterRef);
@@ -182,8 +183,8 @@ class OrderRepository {
           'address': customerAddress,
           'phone': normalizedPhone,
           'phoneNumber': normalizedPhone,
-          'customerCode': customerCode,
-          'customerSerial': customerSerial,
+          FirestoreFields.customerCode: customerCode,
+          FirestoreFields.customerSerial: customerSerial,
           'lastOrderDate': FieldValue.serverTimestamp(),
         }, SetOptions(merge: true));
       } else {
@@ -194,18 +195,18 @@ class OrderRepository {
       // ── Write order document ──────────────────────────────────────────────
       tx.set(newOrderRef, {
         'serialNumber': serialNumber,
-        'customerPhone': normalizedPhone,
+        FirestoreFields.customerPhone: normalizedPhone,
         'customerPhoneNumber': normalizedPhone,
-        'customerCode': customerCode,
-        'customerSerial': customerSerial,
-        'customerName': customerName,
+        FirestoreFields.customerCode: customerCode,
+        FirestoreFields.customerSerial: customerSerial,
+        FirestoreFields.customerName: customerName,
         'customerAddress': customerAddress,
         'items': items,
         'totalPieces': totalPieces,
-        'carNumber': carNumber,
+        FirestoreFields.carNumber: carNumber,
         'driverName': driverName,
         'status': AppStrings.statusReceived,
-        'createdAt': FieldValue.serverTimestamp(),
+        FirestoreFields.createdAt: FieldValue.serverTimestamp(),
       });
 
       return OrderCreationResult(

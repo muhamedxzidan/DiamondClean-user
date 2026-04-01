@@ -10,5 +10,13 @@ class FirebaseDocumentIds {
   static const customerCounter = 'customer_counter';
 }
 
-
-
+class FirestoreFields {
+  static const customerPhone = 'customerPhone';
+  static const customerCode = 'customerCode';
+  static const customerName = 'customerName';
+  static const isActive = 'isActive';
+  static const createdAt = 'createdAt';
+  static const carNumber = 'carNumber';
+  static const password = 'password';
+  static const customerSerial = 'customerSerial';
+}

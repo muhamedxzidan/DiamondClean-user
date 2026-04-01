@@ -1,6 +1,6 @@
 class AppStrings {
   // --- Common ---
-  static const String appName = 'كيمو كلين';
+  static const String appName = 'CPC clean';
   static const String requiredValidation = 'مطلوب';
   static const String unexpectedError = 'حدث خطأ غير متوقع';
   static const String unknown = 'غير معروف';
@@ -34,7 +34,7 @@ class AppStrings {
       'حدث خطأ غير متوقع أثناء حفظ الطلب';
 
   // WhatsApp Strings
-  static const String whatsappMessageHeader = '🧺 *أوردر جديد من كيمو كلين*';
+  static const String whatsappMessageHeader = '🧺 *أوردر جديد من CPC clean*';
   static const String whatsappMessageSeparator = '---------------------------';
   static const String whatsappCustomerCodePrefix = '🆔 *كود العميل:* ';
   static const String whatsappOrderReceivedSuccess =
