@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:kimo_clean/features/orders/cubit/new_order_cubit.dart';
-import 'package:kimo_clean/features/orders/cubit/new_order_state.dart';
-import 'package:kimo_clean/core/theme/app_colors.dart';
+import 'package:cpc_clean_user/features/orders/cubit/new_order_cubit.dart';
+import 'package:cpc_clean_user/features/orders/cubit/new_order_state.dart';
+import 'package:cpc_clean_user/core/theme/app_colors.dart';
 
 class ItemCounterRow extends StatelessWidget {
   final String itemName;

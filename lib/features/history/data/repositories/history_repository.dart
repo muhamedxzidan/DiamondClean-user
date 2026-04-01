@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:kimo_clean/core/constants/firebase_constants.dart';
-import 'package:kimo_clean/features/history/data/models/order_model.dart';
-import 'package:kimo_clean/core/constants/app_strings.dart';
+import 'package:cpc_clean_user/core/constants/firebase_constants.dart';
+import 'package:cpc_clean_user/features/history/data/models/order_model.dart';
+import 'package:cpc_clean_user/core/constants/app_strings.dart';
 
 class HistoryRepositoryException implements Exception {
   final String message;

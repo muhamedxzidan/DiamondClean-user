@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:kimo_clean/core/constants/app_strings.dart';
-import 'package:kimo_clean/features/auth/cubit/auth_cubit.dart';
-import 'package:kimo_clean/features/auth/cubit/auth_state.dart';
-import 'package:kimo_clean/core/routes/routes.dart';
-import 'package:kimo_clean/core/theme/app_colors.dart';
+import 'package:cpc_clean_user/core/constants/app_strings.dart';
+import 'package:cpc_clean_user/features/auth/cubit/auth_cubit.dart';
+import 'package:cpc_clean_user/features/auth/cubit/auth_state.dart';
+import 'package:cpc_clean_user/core/routes/routes.dart';
+import 'package:cpc_clean_user/core/theme/app_colors.dart';
 
 class LoginForm extends StatefulWidget {
   const LoginForm({super.key});

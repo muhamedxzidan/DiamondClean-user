@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart' hide TextDirection;
-import 'package:kimo_clean/features/history/data/models/order_model.dart';
-import 'package:kimo_clean/features/history/presentation/widgets/history_order_card.dart';
-import 'package:kimo_clean/core/constants/app_strings.dart';
-import 'package:kimo_clean/core/theme/app_colors.dart';
+import 'package:cpc_clean_user/features/history/data/models/order_model.dart';
+import 'package:cpc_clean_user/features/history/presentation/widgets/history_order_card.dart';
+import 'package:cpc_clean_user/core/constants/app_strings.dart';
+import 'package:cpc_clean_user/core/theme/app_colors.dart';
 
 class DailyHistoryOrdersList extends StatelessWidget {
   final Map<String, List<OrderModel>> groupedOrders;

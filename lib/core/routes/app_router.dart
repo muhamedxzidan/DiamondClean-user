@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:kimo_clean/core/constants/app_strings.dart';
+import 'package:cpc_clean_user/core/constants/app_strings.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:kimo_clean/core/routes/routes.dart';
-import 'package:kimo_clean/features/auth/presentation/screens/splash_screen.dart';
-import 'package:kimo_clean/features/auth/presentation/screens/login_screen.dart';
-import 'package:kimo_clean/features/home/presentation/screens/home_screen.dart';
-import 'package:kimo_clean/features/orders/presentation/screens/new_order_screen.dart';
-import 'package:kimo_clean/features/orders/cubit/new_order_cubit.dart';
-import 'package:kimo_clean/features/orders/data/repositories/order_repository.dart';
-import 'package:kimo_clean/features/auth/data/repositories/auth_repository.dart';
-import 'package:kimo_clean/features/history/presentation/screens/daily_history_screen.dart';
-import 'package:kimo_clean/features/history/cubit/history_cubit.dart';
-import 'package:kimo_clean/features/history/data/repositories/history_repository.dart';
-import 'package:kimo_clean/features/history/data/models/order_model.dart';
+import 'package:cpc_clean_user/core/routes/routes.dart';
+import 'package:cpc_clean_user/features/auth/presentation/screens/splash_screen.dart';
+import 'package:cpc_clean_user/features/auth/presentation/screens/login_screen.dart';
+import 'package:cpc_clean_user/features/home/presentation/screens/home_screen.dart';
+import 'package:cpc_clean_user/features/orders/presentation/screens/new_order_screen.dart';
+import 'package:cpc_clean_user/features/orders/cubit/new_order_cubit.dart';
+import 'package:cpc_clean_user/features/orders/data/repositories/order_repository.dart';
+import 'package:cpc_clean_user/features/auth/data/repositories/auth_repository.dart';
+import 'package:cpc_clean_user/features/history/presentation/screens/daily_history_screen.dart';
+import 'package:cpc_clean_user/features/history/cubit/history_cubit.dart';
+import 'package:cpc_clean_user/features/history/data/repositories/history_repository.dart';
+import 'package:cpc_clean_user/features/history/data/models/order_model.dart';
 
 class AppRouter {
   Route? generateRoute(RouteSettings settings) {

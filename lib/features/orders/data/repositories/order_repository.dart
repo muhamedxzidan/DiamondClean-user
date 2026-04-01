@@ -1,9 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:kimo_clean/core/constants/app_strings.dart';
-import 'package:kimo_clean/core/constants/firebase_constants.dart';
-import 'package:kimo_clean/core/services/firebase_service.dart';
-import 'package:kimo_clean/core/utils/phone_utils.dart';
-import 'package:kimo_clean/features/orders/data/models/customer_lookup_model.dart';
+import 'package:cpc_clean_user/core/constants/app_strings.dart';
+import 'package:cpc_clean_user/core/constants/firebase_constants.dart';
+import 'package:cpc_clean_user/core/services/firebase_service.dart';
+import 'package:cpc_clean_user/core/utils/phone_utils.dart';
+import 'package:cpc_clean_user/features/orders/data/models/customer_lookup_model.dart';
 
 class OrderRepositoryException implements Exception {
   final String message;

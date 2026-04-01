@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:kimo_clean/core/constants/app_strings.dart';
-import 'package:kimo_clean/core/routes/routes.dart';
-import 'package:kimo_clean/core/utils/phone_utils.dart';
-import 'package:kimo_clean/features/home/presentation/widgets/home_drawer.dart';
+import 'package:cpc_clean_user/core/constants/app_strings.dart';
+import 'package:cpc_clean_user/core/routes/routes.dart';
+import 'package:cpc_clean_user/core/utils/phone_utils.dart';
+import 'package:cpc_clean_user/features/home/presentation/widgets/home_drawer.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});

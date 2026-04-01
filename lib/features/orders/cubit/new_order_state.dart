@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:kimo_clean/features/orders/data/models/order_item_model.dart';
+import 'package:cpc_clean_user/features/orders/data/models/order_item_model.dart';
 
 sealed class NewOrderState extends Equatable {
   @override

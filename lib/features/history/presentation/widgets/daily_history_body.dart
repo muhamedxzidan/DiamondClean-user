@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:kimo_clean/core/constants/app_strings.dart';
-import 'package:kimo_clean/features/history/cubit/history_cubit.dart';
-import 'package:kimo_clean/features/history/cubit/history_state.dart';
-import 'package:kimo_clean/features/history/presentation/widgets/daily_history_orders_list.dart';
-import 'package:kimo_clean/features/history/presentation/widgets/daily_history_summary_card.dart';
+import 'package:cpc_clean_user/core/constants/app_strings.dart';
+import 'package:cpc_clean_user/features/history/cubit/history_cubit.dart';
+import 'package:cpc_clean_user/features/history/cubit/history_state.dart';
+import 'package:cpc_clean_user/features/history/presentation/widgets/daily_history_orders_list.dart';
+import 'package:cpc_clean_user/features/history/presentation/widgets/daily_history_summary_card.dart';
 
 class DailyHistoryBody extends StatelessWidget {
   const DailyHistoryBody({super.key});

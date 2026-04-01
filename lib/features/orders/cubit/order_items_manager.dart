@@ -1,4 +1,4 @@
-import 'package:kimo_clean/features/orders/data/models/order_item_model.dart';
+import 'package:cpc_clean_user/features/orders/data/models/order_item_model.dart';
 
 class OrderItemsManager {
   final Map<String, int> _quantities;

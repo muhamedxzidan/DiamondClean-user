@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:kimo_clean/core/constants/app_strings.dart';
-import 'package:kimo_clean/core/routes/routes.dart';
-import 'package:kimo_clean/core/theme/app_colors.dart';
+import 'package:cpc_clean_user/core/constants/app_strings.dart';
+import 'package:cpc_clean_user/core/routes/routes.dart';
+import 'package:cpc_clean_user/core/theme/app_colors.dart';
 
 class NewOrderButton extends StatelessWidget {
   const NewOrderButton({super.key});

@@ -1,10 +1,10 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:kimo_clean/core/constants/app_strings.dart';
-import 'package:kimo_clean/core/utils/phone_utils.dart';
-import 'package:kimo_clean/features/auth/data/repositories/auth_repository.dart';
-import 'package:kimo_clean/features/orders/cubit/new_order_state.dart';
-import 'package:kimo_clean/features/orders/cubit/order_items_manager.dart';
-import 'package:kimo_clean/features/orders/data/repositories/order_repository.dart';
+import 'package:cpc_clean_user/core/constants/app_strings.dart';
+import 'package:cpc_clean_user/core/utils/phone_utils.dart';
+import 'package:cpc_clean_user/features/auth/data/repositories/auth_repository.dart';
+import 'package:cpc_clean_user/features/orders/cubit/new_order_state.dart';
+import 'package:cpc_clean_user/features/orders/cubit/order_items_manager.dart';
+import 'package:cpc_clean_user/features/orders/data/repositories/order_repository.dart';
 
 class NewOrderCubit extends Cubit<NewOrderState> {
   final OrderRepository _orderRepository;

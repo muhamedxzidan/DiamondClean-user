@@ -8,8 +8,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:kimo_clean/main.dart';
-import 'package:kimo_clean/core/routes/app_router.dart';
+import 'package:cpc_clean_user/main.dart';
+import 'package:cpc_clean_user/core/routes/app_router.dart';
 
 void main() {
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {

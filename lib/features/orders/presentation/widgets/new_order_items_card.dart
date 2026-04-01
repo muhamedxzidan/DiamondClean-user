@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:kimo_clean/core/constants/app_strings.dart';
+import 'package:cpc_clean_user/core/constants/app_strings.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:kimo_clean/features/orders/cubit/new_order_cubit.dart';
-import 'package:kimo_clean/features/orders/cubit/new_order_state.dart';
-import 'package:kimo_clean/features/orders/presentation/widgets/item_counter_row.dart';
-import 'package:kimo_clean/core/theme/app_colors.dart';
+import 'package:cpc_clean_user/features/orders/cubit/new_order_cubit.dart';
+import 'package:cpc_clean_user/features/orders/cubit/new_order_state.dart';
+import 'package:cpc_clean_user/features/orders/presentation/widgets/item_counter_row.dart';
+import 'package:cpc_clean_user/core/theme/app_colors.dart';
 
 class NewOrderItemsCard extends StatelessWidget {
   const NewOrderItemsCard({super.key});

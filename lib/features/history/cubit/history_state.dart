@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:kimo_clean/features/history/data/models/order_model.dart';
+import 'package:cpc_clean_user/features/history/data/models/order_model.dart';
 
 sealed class HistoryState extends Equatable {
   const HistoryState();

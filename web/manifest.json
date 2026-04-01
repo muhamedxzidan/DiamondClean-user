@@ -1,6 +1,6 @@
 {
-    "name": "kimo_clean",
-    "short_name": "kimo_clean",
+    "name": "cpc_clean_user",
+    "short_name": "cpc_clean_user",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

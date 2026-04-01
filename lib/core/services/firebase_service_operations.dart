@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:kimo_clean/core/constants/firebase_constants.dart';
-import 'package:kimo_clean/core/utils/phone_utils.dart';
+import 'package:cpc_clean_user/core/constants/firebase_constants.dart';
+import 'package:cpc_clean_user/core/utils/phone_utils.dart';
 
 Future<Map<String, dynamic>?> checkCustomerExistsOperation({
   required FirebaseFirestore firestore,

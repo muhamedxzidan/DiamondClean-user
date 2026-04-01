@@ -1,5 +1,5 @@
 import 'package:url_launcher/url_launcher.dart';
-import 'package:kimo_clean/core/constants/app_strings.dart';
+import 'package:cpc_clean_user/core/constants/app_strings.dart';
 
 class WhatsAppUtils {
   /// Converts a local Egyptian mobile number (011xxx / 010xxx / 012xxx / 015xxx)

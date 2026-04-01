@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:kimo_clean/core/constants/app_strings.dart';
-import 'package:kimo_clean/features/orders/presentation/widgets/new_order_body.dart';
+import 'package:cpc_clean_user/core/constants/app_strings.dart';
+import 'package:cpc_clean_user/features/orders/presentation/widgets/new_order_body.dart';
 
 class NewOrderScreen extends StatelessWidget {
   final String? initialLookupQuery;
