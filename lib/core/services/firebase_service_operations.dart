@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:cpc_clean_user/core/constants/firebase_constants.dart';
-import 'package:cpc_clean_user/core/constants/app_constants.dart';
-import 'package:cpc_clean_user/core/utils/phone_utils.dart';
+import 'package:diamond_clean_user/core/constants/firebase_constants.dart';
+import 'package:diamond_clean_user/core/constants/app_constants.dart';
+import 'package:diamond_clean_user/core/utils/phone_utils.dart';
 
 Future<Map<String, dynamic>?> checkCustomerExistsOperation({
   required FirebaseFirestore firestore,
@@ -20,7 +20,7 @@ Future<Map<String, dynamic>?> checkCustomerExistsOperation({
     return doc.exists ? doc.data() : null;
   }
 
-  // ── Non-phone input — lookup by customerCode field (e.g. "KC-00001").
+  // ── Non-phone input — lookup by customerCode field (e.g. "DC-00001").
   final byCode = await firestore
       .collection(FirebaseCollections.customers)
       .where(FirestoreFields.customerCode, isEqualTo: rawValue.toUpperCase())

@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:cpc_clean_user/core/constants/app_constants.dart';
-import 'package:cpc_clean_user/core/utils/phone_utils.dart';
-import 'package:cpc_clean_user/features/orders/cubit/new_order_cubit.dart';
-import 'package:cpc_clean_user/features/orders/cubit/new_order_state.dart';
-import 'package:cpc_clean_user/features/orders/presentation/widgets/new_order_body_helpers.dart';
-import 'package:cpc_clean_user/features/orders/presentation/widgets/new_order_form_section.dart';
+import 'package:diamond_clean_user/core/constants/app_constants.dart';
+import 'package:diamond_clean_user/core/utils/phone_utils.dart';
+import 'package:diamond_clean_user/features/orders/cubit/category_cubit.dart';
+import 'package:diamond_clean_user/features/orders/cubit/new_order_cubit.dart';
+import 'package:diamond_clean_user/features/orders/cubit/new_order_state.dart';
+import 'package:diamond_clean_user/features/orders/presentation/widgets/new_order_body_helpers.dart';
+import 'package:diamond_clean_user/features/orders/presentation/widgets/new_order_form_section.dart';
 
 class NewOrderBody extends StatefulWidget {
   final String? initialLookupQuery;
@@ -105,38 +106,42 @@ class _NewOrderBodyState extends State<NewOrderBody> {
   Widget build(BuildContext context) {
     return BlocListener<NewOrderCubit, NewOrderState>(
       listener: _listenToState,
-      child: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          child: BlocBuilder<NewOrderCubit, NewOrderState>(
-            builder: (context, state) {
-              return NewOrderFormSection(
-                phoneController: _phoneController,
-                nameController: _nameController,
-                addressController: _addressController,
-                notesController: _notesController,
-                customerCode: state is NewOrderPhoneLookupSuccess
-                    ? state.customerCode
-                    : '',
-                lookupSuggestion: buildLookupSuggestion(
-                  state,
-                  pendingCodeLookup: _uiSession.pendingCodeLookup,
-                ),
-                isLookupLoading: state is NewOrderPhoneLookupLoading,
-                onPhoneChanged: _onPhoneChanged,
-                onSavePressed: () {
-                  if (_formKey.currentState?.validate() ?? false) {
-                    context.read<NewOrderCubit>().saveOrder(
-                      phone: _phoneController.text,
-                      name: _nameController.text,
-                      address: _addressController.text,
-                      notes: _notesController.text,
-                    );
-                  }
-                },
-              );
-            },
+      child: RefreshIndicator(
+        onRefresh: () => context.read<CategoryCubit>().loadCategories(),
+        child: SingleChildScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          padding: const EdgeInsets.all(16.0),
+          child: Form(
+            key: _formKey,
+            child: BlocBuilder<NewOrderCubit, NewOrderState>(
+              builder: (context, state) {
+                return NewOrderFormSection(
+                  phoneController: _phoneController,
+                  nameController: _nameController,
+                  addressController: _addressController,
+                  notesController: _notesController,
+                  customerCode: state is NewOrderPhoneLookupSuccess
+                      ? state.customerCode
+                      : '',
+                  lookupSuggestion: buildLookupSuggestion(
+                    state,
+                    pendingCodeLookup: _uiSession.pendingCodeLookup,
+                  ),
+                  isLookupLoading: state is NewOrderPhoneLookupLoading,
+                  onPhoneChanged: _onPhoneChanged,
+                  onSavePressed: () {
+                    if (_formKey.currentState?.validate() ?? false) {
+                      context.read<NewOrderCubit>().saveOrder(
+                        phone: _phoneController.text,
+                        name: _nameController.text,
+                        address: _addressController.text,
+                        notes: _notesController.text,
+                      );
+                    }
+                  },
+                );
+              },
+            ),
           ),
         ),
       ),

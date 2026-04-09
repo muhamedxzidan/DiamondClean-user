@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:cpc_clean_user/core/constants/app_strings.dart';
-import 'package:cpc_clean_user/features/auth/presentation/widgets/login_form.dart';
-import 'package:cpc_clean_user/core/theme/app_colors.dart';
+import 'package:diamond_clean_user/core/constants/app_strings.dart';
+import 'package:diamond_clean_user/features/auth/presentation/widgets/login_form.dart';
+import 'package:diamond_clean_user/core/theme/app_colors.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});

@@ -1,6 +1,6 @@
 class AppStrings {
   // --- Common ---
-  static const String appName = 'CPC clean';
+  static const String appName = 'Diamond clean';
   static const String requiredValidation = 'مطلوب';
   static const String unexpectedError = 'حدث خطأ غير متوقع';
   static const String unknown = 'غير معروف';
@@ -18,6 +18,8 @@ class AppStrings {
   static const String errorPermissionDenied =
       'ليس لديك صلاحية الوصول. تحقق من إعدادات قاعدة البيانات';
   static const String errorFetchingCustomerData = 'فشل في جلب بيانات العميل';
+  static const String errorFetchingCategories = 'فشل في جلب الأصناف';
+  static const String retry = 'إعادة المحاولة';
   static const String errorSavingOrder = 'فشل حفظ الأوردر';
   static const String errorCheckingCustomer = 'فشل في التحقق من بيانات العميل';
   static const String errorCheckingCar = 'فشل في التحقق من حالة السيارة';
@@ -34,7 +36,7 @@ class AppStrings {
       'حدث خطأ غير متوقع أثناء حفظ الطلب';
 
   // WhatsApp Strings
-  static const String whatsappMessageHeader = '🧺 *أوردر جديد من CPC clean*';
+  static const String whatsappMessageHeader = '🧺 *أوردر جديد من Diamond clean*';
   static const String whatsappMessageSeparator = '---------------------------';
   static const String whatsappCustomerCodePrefix = '🆔 *كود العميل:* ';
   static const String whatsappOrderReceivedSuccess =

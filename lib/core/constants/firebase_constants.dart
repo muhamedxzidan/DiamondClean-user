@@ -3,6 +3,7 @@ class FirebaseCollections {
   static const counters = 'counters';
   static const customers = 'customers';
   static const orders = 'orders';
+  static const categories = 'categories';
 }
 
 class FirebaseDocumentIds {

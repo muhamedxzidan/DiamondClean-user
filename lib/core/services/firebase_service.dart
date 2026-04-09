@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:cpc_clean_user/core/constants/app_strings.dart';
-import 'package:cpc_clean_user/core/services/firebase_service_operations.dart';
+import 'package:diamond_clean_user/core/constants/app_strings.dart';
+import 'package:diamond_clean_user/core/services/firebase_service_operations.dart';
 
 class FirebaseServiceException implements Exception {
   final String message;

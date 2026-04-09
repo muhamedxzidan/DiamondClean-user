@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:cpc_clean_user/core/constants/app_strings.dart';
-import 'package:cpc_clean_user/features/history/presentation/widgets/daily_history_body.dart';
+import 'package:diamond_clean_user/core/constants/app_strings.dart';
+import 'package:diamond_clean_user/features/history/presentation/widgets/daily_history_body.dart';
 
 class DailyHistoryScreen extends StatelessWidget {
   const DailyHistoryScreen({super.key});

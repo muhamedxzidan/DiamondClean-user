@@ -1,8 +1,8 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:cpc_clean_user/core/routes/app_router.dart';
-import 'package:cpc_clean_user/cpc_clean_user.dart';
+import 'package:diamond_clean_user/core/routes/app_router.dart';
+import 'package:diamond_clean_user/diamond_clean_user.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_jailbreak_detection/flutter_jailbreak_detection.dart';
 
@@ -38,6 +38,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CpcCleanUser(appRouter: appRouter);
+    return DiamondCleanUser(appRouter: appRouter);
   }
 }

@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:cpc_clean_user/core/constants/app_strings.dart';
-import 'package:cpc_clean_user/core/constants/firebase_constants.dart';
+import 'package:diamond_clean_user/core/constants/app_strings.dart';
+import 'package:diamond_clean_user/core/constants/firebase_constants.dart';
 
 /// Custom exception for authentication errors with user-facing messages.
 sealed class AuthException implements Exception {

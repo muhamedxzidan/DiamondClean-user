@@ -1,10 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:cpc_clean_user/core/constants/app_constants.dart';
-import 'package:cpc_clean_user/core/constants/app_strings.dart';
-import 'package:cpc_clean_user/core/constants/firebase_constants.dart';
-import 'package:cpc_clean_user/core/services/firebase_service.dart';
-import 'package:cpc_clean_user/core/utils/phone_utils.dart';
-import 'package:cpc_clean_user/features/orders/data/models/customer_lookup_model.dart';
+import 'package:diamond_clean_user/core/constants/app_constants.dart';
+import 'package:diamond_clean_user/core/constants/app_strings.dart';
+import 'package:diamond_clean_user/core/constants/firebase_constants.dart';
+import 'package:diamond_clean_user/core/services/firebase_service.dart';
+import 'package:diamond_clean_user/core/utils/phone_utils.dart';
+import 'package:diamond_clean_user/features/orders/data/models/customer_lookup_model.dart';
 
 class OrderRepositoryException implements Exception {
   final String message;
@@ -15,8 +15,8 @@ class OrderRepositoryException implements Exception {
   String toString() => message;
 }
 
-/// Formats an integer serial into the canonical customer code, e.g. "CPC-1".
-String _buildCustomerCode(int serial) => 'CPC-$serial';
+/// Formats an integer serial into the canonical customer code, e.g. "DC-1".
+String _buildCustomerCode(int serial) => 'DC-$serial';
 
 class OrderRepository {
   final FirebaseService _firebaseService;
@@ -32,7 +32,7 @@ class OrderRepository {
   ///
   /// Input is always pure digits:
   ///   - 11 digits  → phone lookup via [FirebaseService.checkCustomerExists].
-  ///   - other      → customer-code lookup (prepends "CPC-").
+  ///   - other      → customer-code lookup (prepends "DC-").
   Future<CustomerLookupModel?> lookupCustomer(String phoneOrCode) async {
     try {
       final input = normalizePhone(phoneOrCode);
@@ -46,7 +46,7 @@ class OrderRepository {
       } else {
         final snapshot = await _firestore
             .collection(FirebaseCollections.customers)
-            .where(FirestoreFields.customerCode, isEqualTo: 'CPC-$input')
+            .where(FirestoreFields.customerCode, isEqualTo: 'DC-$input')
             .limit(1)
             .get();
         if (snapshot.docs.isNotEmpty) data = snapshot.docs.first.data();
@@ -146,8 +146,10 @@ class OrderRepository {
       final customerSnap = await tx.get(customerRef);
       final existing = customerSnap.data();
 
-      int customerSerial = (existing?[FirestoreFields.customerSerial] as num?)?.toInt() ?? 0;
-      String customerCode = (existing?[FirestoreFields.customerCode] as String? ?? '').trim();
+      int customerSerial =
+          (existing?[FirestoreFields.customerSerial] as num?)?.toInt() ?? 0;
+      String customerCode =
+          (existing?[FirestoreFields.customerCode] as String? ?? '').trim();
 
       if (customerSerial == 0) {
         final ccSnap = await tx.get(customerCounterRef);

@@ -1,10 +1,7 @@
-import 'package:cpc_clean_user/features/orders/data/models/order_item_model.dart';
+import 'package:diamond_clean_user/features/orders/data/models/order_item_model.dart';
 
 class OrderItemsManager {
-  final Map<String, int> _quantities;
-
-  OrderItemsManager(List<String> itemNames)
-    : _quantities = {for (final name in itemNames) name: 0};
+  final Map<String, int> _quantities = {};
 
   int get totalPieces => _quantities.values.fold(0, (a, b) => a + b);
 
@@ -34,8 +31,6 @@ class OrderItemsManager {
   }
 
   void reset() {
-    for (final key in _quantities.keys) {
-      _quantities[key] = 0;
-    }
+    _quantities.clear();
   }
 }

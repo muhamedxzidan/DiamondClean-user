@@ -1,4 +1,4 @@
-package com.muhamedxzidan.cpc_clean_user
+package com.muhamedxzidan.diamond_clean_user
 
 import io.flutter.embedding.android.FlutterActivity
 

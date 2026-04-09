@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:cpc_clean_user/core/constants/app_strings.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:cpc_clean_user/features/orders/cubit/new_order_cubit.dart';
-import 'package:cpc_clean_user/features/orders/cubit/new_order_state.dart';
-import 'package:cpc_clean_user/features/orders/presentation/widgets/item_counter_row.dart';
-import 'package:cpc_clean_user/core/theme/app_colors.dart';
+import 'package:diamond_clean_user/core/constants/app_strings.dart';
+import 'package:diamond_clean_user/core/theme/app_colors.dart';
+import 'package:diamond_clean_user/features/orders/cubit/category_cubit.dart';
+import 'package:diamond_clean_user/features/orders/cubit/category_state.dart';
+import 'package:diamond_clean_user/features/orders/cubit/new_order_cubit.dart';
+import 'package:diamond_clean_user/features/orders/cubit/new_order_state.dart';
+import 'package:diamond_clean_user/features/orders/presentation/widgets/item_counter_row.dart';
 
 class NewOrderItemsCard extends StatelessWidget {
   const NewOrderItemsCard({super.key});
@@ -28,12 +30,51 @@ class NewOrderItemsCard extends StatelessWidget {
               ),
             ),
             const Divider(height: 24),
-            ...NewOrderCubit.itemNames.map((itemName) {
-              return ItemCounterRow(itemName: itemName);
-            }),
+            BlocBuilder<CategoryCubit, CategoryState>(
+              builder: (context, categoryState) {
+                return switch (categoryState) {
+                  CategoryLoading() => const Center(
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(vertical: 16),
+                      child: CircularProgressIndicator(),
+                    ),
+                  ),
+                  CategoryError(:final message) => Center(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      child: Column(
+                        children: [
+                          Text(
+                            message,
+                            style: const TextStyle(color: Colors.red),
+                            textAlign: TextAlign.center,
+                          ),
+                          const SizedBox(height: 8),
+                          TextButton(
+                            onPressed: () =>
+                                context.read<CategoryCubit>().loadCategories(),
+                            child: const Text(AppStrings.retry),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  CategoryLoaded(:final categories) => Column(
+                    children: categories
+                        .map((category) => ItemCounterRow(itemName: category.name))
+                        .toList(),
+                  ),
+                  // TODO: Handle this case.
+                  CategoryCreating() => throw UnimplementedError(),
+                  // TODO: Handle this case.
+                  CategoryCreated() => throw UnimplementedError(),
+                };
+              },
+            ),
             const Divider(height: 24),
             BlocSelector<NewOrderCubit, NewOrderState, int>(
-              selector: (state) => state is NewOrderItemsUpdated ? state.totalPieces : 0,
+              selector: (state) =>
+                  state is NewOrderItemsUpdated ? state.totalPieces : 0,
               builder: (context, totalPieces) {
                 return Container(
                   width: double.infinity,

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:cpc_clean_user/core/constants/app_strings.dart';
-import 'package:cpc_clean_user/core/utils/phone_utils.dart';
-import 'package:cpc_clean_user/features/orders/presentation/widgets/new_order_items_card.dart';
-import 'package:cpc_clean_user/features/orders/presentation/widgets/new_order_submit_button.dart';
+import 'package:diamond_clean_user/core/constants/app_strings.dart';
+import 'package:diamond_clean_user/core/utils/phone_utils.dart';
+import 'package:diamond_clean_user/features/orders/presentation/widgets/new_order_items_card.dart';
+import 'package:diamond_clean_user/features/orders/presentation/widgets/new_order_submit_button.dart';
 
 class NewOrderFormSection extends StatelessWidget {
   final TextEditingController phoneController;

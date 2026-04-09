@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:cpc_clean_user/core/constants/app_strings.dart';
-import 'package:cpc_clean_user/features/auth/cubit/auth_cubit.dart';
-import 'package:cpc_clean_user/features/auth/cubit/auth_state.dart';
-import 'package:cpc_clean_user/core/routes/routes.dart';
-import 'package:cpc_clean_user/core/theme/app_colors.dart';
+import 'package:diamond_clean_user/core/constants/app_strings.dart';
+import 'package:diamond_clean_user/features/auth/cubit/auth_cubit.dart';
+import 'package:diamond_clean_user/features/auth/cubit/auth_state.dart';
+import 'package:diamond_clean_user/core/routes/routes.dart';
+import 'package:diamond_clean_user/core/theme/app_colors.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});

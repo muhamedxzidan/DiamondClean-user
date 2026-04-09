@@ -2,9 +2,9 @@ import 'dart:async';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:cpc_clean_user/core/constants/app_strings.dart';
-import 'package:cpc_clean_user/features/auth/data/repositories/auth_repository.dart';
-import 'package:cpc_clean_user/features/auth/cubit/auth_state.dart';
+import 'package:diamond_clean_user/core/constants/app_strings.dart';
+import 'package:diamond_clean_user/features/auth/data/repositories/auth_repository.dart';
+import 'package:diamond_clean_user/features/auth/cubit/auth_state.dart';
 
 class AuthCubit extends Cubit<AuthState> {
   final AuthRepository _authRepository;

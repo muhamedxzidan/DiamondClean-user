@@ -1,21 +1,21 @@
 {
   "project_info": {
-    "project_number": "710649053384",
-    "project_id": "cpc-clean",
-    "storage_bucket": "cpc-clean.firebasestorage.app"
+    "project_number": "718127856617",
+    "project_id": "daimound-clean",
+    "storage_bucket": "daimound-clean.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:710649053384:android:295e7c3c980c4a3d19e5fd",
+        "mobilesdk_app_id": "1:718127856617:android:16c0f348b209b9fb1c6978",
         "android_client_info": {
-          "package_name": "com.muhamedxzidan.cpc_clean_user"
+          "package_name": "com.muhamedxzidan.diamond_clean_user"
         }
       },
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyApcVoMG5fQzztqfWvYQ6pw1r827mgaXQY"
+          "current_key": "AIzaSyB80zU_cuyPq1-S0GgBF1nZKMuJ6fFySoI"
         }
       ],
       "services": {

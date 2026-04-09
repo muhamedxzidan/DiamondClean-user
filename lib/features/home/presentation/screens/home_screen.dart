@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:cpc_clean_user/core/constants/app_constants.dart';
-import 'package:cpc_clean_user/core/constants/app_strings.dart';
-import 'package:cpc_clean_user/core/routes/routes.dart';
-import 'package:cpc_clean_user/core/utils/phone_utils.dart';
-import 'package:cpc_clean_user/features/home/presentation/widgets/home_drawer.dart';
+import 'package:diamond_clean_user/core/constants/app_constants.dart';
+import 'package:diamond_clean_user/core/constants/app_strings.dart';
+import 'package:diamond_clean_user/core/routes/routes.dart';
+import 'package:diamond_clean_user/core/utils/phone_utils.dart';
+import 'package:diamond_clean_user/features/home/presentation/widgets/home_drawer.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -37,7 +37,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
     final String preparedQuery = numericInput.length == AppConstants.egyptPhoneLength
         ? numericInput
-        : 'KC-$numericInput';
+        : 'DC-$numericInput';
 
     Navigator.of(context).pushNamed(Routes.newOrder, arguments: preparedQuery);
   }

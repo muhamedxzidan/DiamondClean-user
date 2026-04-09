@@ -1,31 +1,23 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:cpc_clean_user/core/constants/app_constants.dart';
-import 'package:cpc_clean_user/core/constants/app_strings.dart';
-import 'package:cpc_clean_user/core/utils/phone_utils.dart';
-import 'package:cpc_clean_user/features/auth/data/repositories/auth_repository.dart';
-import 'package:cpc_clean_user/features/orders/cubit/new_order_state.dart';
-import 'package:cpc_clean_user/features/orders/cubit/order_items_manager.dart';
-import 'package:cpc_clean_user/features/orders/data/repositories/order_repository.dart';
+import 'package:diamond_clean_user/core/constants/app_constants.dart';
+import 'package:diamond_clean_user/core/constants/app_strings.dart';
+import 'package:diamond_clean_user/core/utils/phone_utils.dart';
+import 'package:diamond_clean_user/features/auth/data/repositories/auth_repository.dart';
+import 'package:diamond_clean_user/features/orders/cubit/new_order_state.dart';
+import 'package:diamond_clean_user/features/orders/cubit/order_items_manager.dart';
+import 'package:diamond_clean_user/features/orders/data/repositories/order_repository.dart';
 
 class NewOrderCubit extends Cubit<NewOrderState> {
   final OrderRepository _orderRepository;
   final AuthRepository _authRepository;
+  final OrderItemsManager _itemsManager = OrderItemsManager();
+
   NewOrderCubit({
     required AuthRepository authRepository,
     required OrderRepository orderRepository,
   }) : _authRepository = authRepository,
        _orderRepository = orderRepository,
        super(NewOrderInitial());
-
-  static const itemNames = [
-    AppStrings.categoryCarpet,
-    AppStrings.categoryCarpetCover,
-    AppStrings.categoryDuvet,
-    AppStrings.categoryBlanket,
-    AppStrings.categoryCurtains,
-    AppStrings.categoryOther,
-  ];
-  late final OrderItemsManager _itemsManager = OrderItemsManager(itemNames);
 
   int get totalPieces => _itemsManager.totalPieces;
   int quantityFor(String itemName) => _itemsManager.quantityFor(itemName);

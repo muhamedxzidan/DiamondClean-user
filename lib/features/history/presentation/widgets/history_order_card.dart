@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:cpc_clean_user/features/history/data/models/order_model.dart';
-import 'package:cpc_clean_user/core/constants/app_strings.dart';
-import 'package:cpc_clean_user/core/theme/app_colors.dart';
+import 'package:diamond_clean_user/features/history/data/models/order_model.dart';
+import 'package:diamond_clean_user/core/constants/app_strings.dart';
+import 'package:diamond_clean_user/core/theme/app_colors.dart';
 
 class HistoryOrderCard extends StatelessWidget {
   const HistoryOrderCard({super.key, required this.order});

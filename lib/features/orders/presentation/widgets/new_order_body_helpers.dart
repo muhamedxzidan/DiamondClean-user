@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:cpc_clean_user/core/constants/app_strings.dart';
-import 'package:cpc_clean_user/core/utils/whatsapp_utils.dart';
-import 'package:cpc_clean_user/features/orders/cubit/new_order_cubit.dart';
-import 'package:cpc_clean_user/features/orders/cubit/new_order_state.dart';
+import 'package:diamond_clean_user/core/constants/app_strings.dart';
+import 'package:diamond_clean_user/core/utils/whatsapp_utils.dart';
+import 'package:diamond_clean_user/features/orders/cubit/new_order_cubit.dart';
+import 'package:diamond_clean_user/features/orders/cubit/new_order_state.dart';
 
 class NewOrderUiSession {
   bool isAutofilled = false;
@@ -13,7 +13,7 @@ class NewOrderUiSession {
 String buildLookupSuggestion(NewOrderState state, {String? pendingCodeLookup}) {
   if (state is NewOrderPhoneLookupLoading) {
     if (pendingCodeLookup != null && pendingCodeLookup.isNotEmpty) {
-      return '${AppStrings.lookupSearchingByCodePrefix} CPC-$pendingCodeLookup';
+      return '${AppStrings.lookupSearchingByCodePrefix} DC-$pendingCodeLookup';
     }
     return AppStrings.lookupSearchingByPhone;
   }
@@ -26,7 +26,7 @@ String buildLookupSuggestion(NewOrderState state, {String? pendingCodeLookup}) {
     if (state.query.length == 11) {
       return AppStrings.lookupNotFoundByPhone;
     }
-    return '${AppStrings.lookupNotFoundByCodePrefix} CPC-${state.query}';
+    return '${AppStrings.lookupNotFoundByCodePrefix} DC-${state.query}';
   }
 
   return '';
