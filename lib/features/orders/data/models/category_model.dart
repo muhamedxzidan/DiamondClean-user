@@ -3,11 +3,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class CategoryModel {
   final String id;
   final String name;
+  final bool hasDimensions;
   final DateTime? createdAt;
 
   const CategoryModel({
     required this.id,
     required this.name,
+    this.hasDimensions = true,
     this.createdAt,
   });
 
@@ -15,6 +17,7 @@ class CategoryModel {
     return CategoryModel(
       id: id,
       name: json['name'] as String? ?? '',
+      hasDimensions: json['hasDimensions'] as bool? ?? true,
       createdAt: (json['createdAt'] as Timestamp?)?.toDate(),
     );
   }
@@ -22,6 +25,7 @@ class CategoryModel {
   Map<String, dynamic> toJson() {
     return {
       'name': name,
+      'hasDimensions': hasDimensions,
       'createdAt': FieldValue.serverTimestamp(),
     };
   }

@@ -86,6 +86,23 @@ class OrderRepository {
   }) async {
     try {
       final normalizedPhone = normalizePhone(phone);
+      // Determine hasDimensions based on selected items
+      // If any item requires dimensions, mark the order as hasDimensions=true
+      bool hasDimensions = true;
+      if (items.isNotEmpty) {
+        final snapshot = await _firestore
+            .collection(FirebaseCollections.categories)
+            .get();
+        final categories = {
+          for (var doc in snapshot.docs)
+            doc['name'] as String: doc['hasDimensions'] as bool? ?? true,
+        };
+        // Check if all selected items have hasDimensions=false
+        final allNoDimensions = items.keys.every(
+          (itemName) => categories[itemName] == false,
+        );
+        hasDimensions = !allNoDimensions;
+      }
       return await _runCreateOrderTransaction(
         normalizedPhone: normalizedPhone,
         customerName: customerName,
@@ -94,6 +111,7 @@ class OrderRepository {
         totalPieces: totalPieces,
         carNumber: carNumber,
         driverName: driverName,
+        hasDimensions: hasDimensions,
       );
     } on FirebaseException catch (e) {
       final msg = switch (e.code) {
@@ -123,6 +141,7 @@ class OrderRepository {
     required int totalPieces,
     required String carNumber,
     required String driverName,
+    required bool hasDimensions,
   }) {
     final counterRef = _firestore
         .collection(FirebaseCollections.counters)
@@ -208,6 +227,7 @@ class OrderRepository {
         FirestoreFields.carNumber: carNumber,
         'driverName': driverName,
         'status': AppStrings.statusReceived,
+        'hasDimensions': hasDimensions,
         FirestoreFields.createdAt: FieldValue.serverTimestamp(),
       });
 
